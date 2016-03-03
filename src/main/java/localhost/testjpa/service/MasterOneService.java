@@ -45,6 +45,18 @@ public class MasterOneService {
 		return model.getId();
 	}
 
+	@Transactional
+	public Long updateDetached(MasterOne model) {
+		if(model.getId() != null) {
+			MasterOne old = masterOneRep.findOne(model.getId());
+			old.getDetails().forEach( det -> { det.setParent(null); });
+		}
+		model.getDetails().forEach(det -> { det.setParent(model); });
+		masterOneRep.save(model);
+		detailOneRep.save(model.getDetails());
+		return model.getId();
+	}
+
 	public MasterOne findOne(Long id) {
 		MasterOne out = masterOneRep.findOne(id);
 		return out;

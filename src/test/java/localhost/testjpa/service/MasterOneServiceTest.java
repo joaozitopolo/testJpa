@@ -72,8 +72,7 @@ public class MasterOneServiceTest extends AbstractTest {
 		MasterOne modelB = masterOneService.findOne(id);
 		assertModel(modelB, 4);
 	}
-	
-	
+		
 	@Test
 	public void saveDetachedTest() {
 		// prepare
@@ -94,6 +93,25 @@ public class MasterOneServiceTest extends AbstractTest {
 		assertModel(modelB, 3);  // the detached detail will be updated. others details will be untouched
 		long count = modelB.getDetails().stream().filter(det -> "other".equals(det.getTitle())).count();
 		Assert.assertEquals("updated title", 1, count);
+	}
+		
+	@Test
+	public void updateDetachedTest() {
+		// prepare
+		Long id = createModel();
+		MasterOne model = masterOneService.findOne(id);
+		assertModel(model, 3);
+		DetailOne detail = model.getDetails().get(0);
+		
+		// update with detached
+		MasterOne detached = MasterOne.toMasterOne(model.getTitle());
+		detached.setId(id);
+		detached.getDetails().add(DetailOne.toDetailOne(null, detail.getId(), "other"));
+		masterOneService.updateDetached(detached);
+		
+		// verify
+		MasterOne modelB = masterOneService.findOne(id);
+		assertModel(modelB, 1);
 	}
 		
 	private Long createModel() {
