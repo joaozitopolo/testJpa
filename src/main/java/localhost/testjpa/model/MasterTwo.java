@@ -43,16 +43,7 @@ public class MasterTwo {
 	}
 
 	public void update(MasterTwo data) {
-		data.details.forEach(det -> { det.parent = this; }); // bind current items
-		this.details.forEach(det -> {
-			boolean found = data.details.stream().filter(det2 -> det.id.equals(det2.id)).count() > 0;
-			if(! found) { // remove old item, and put into the list to be removed by JPA
-				det.setParent(null);
-				data.details.add(det);
-			}
-		});
 		this.title = data.title;
-		this.details = data.details;
 	}
 
 }

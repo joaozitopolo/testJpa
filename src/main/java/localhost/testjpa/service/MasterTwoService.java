@@ -39,13 +39,21 @@ public class MasterTwoService {
 			masterTwoRep.save(model);
 			detailTwoRep.save(model.getDetails());
 		} else {
+			// update model
 			model = findOne(data.getId());
 			model.update(data);
 			masterTwoRep.save(model);
+			
+			// remove old details
 			model.getDetails().forEach(det -> {
-				if(det.getParent() != null) { // only remanescent items
-					detailTwoRep.save(det);
-				}
+				detailTwoRep.delete(det);
+			});
+			
+			// add data details as new
+			data.getDetails().forEach(det -> {
+				det.setId(null);
+				det.setParent(model);
+				detailTwoRep.save(det);
 			});
 		}
 		return model.getId();
@@ -54,5 +62,6 @@ public class MasterTwoService {
 	public MasterTwo findOne(Long id) {
 		return masterTwoRep.findOne(id);
 	}
+	
 	
 }
