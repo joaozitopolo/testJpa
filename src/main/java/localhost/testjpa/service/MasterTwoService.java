@@ -45,9 +45,7 @@ public class MasterTwoService {
 			masterTwoRep.save(model);
 			
 			// remove old details
-			model.getDetails().forEach(det -> {
-				detailTwoRep.delete(det);
-			});
+			detailTwoRep.delete(model.getDetails());
 			
 			// add data details as new
 			data.getDetails().forEach(det -> {
