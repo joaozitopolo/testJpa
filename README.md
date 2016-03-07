@@ -13,4 +13,4 @@ Single saves and updates using MasterOne->List<DetailOne>
 
 ### MasterTwo tests
 Saves and updates model, using model.update(updateData) method
-The old details are erased, and is replaced with the new details
+The old details are erased, and are replaced with the new details
